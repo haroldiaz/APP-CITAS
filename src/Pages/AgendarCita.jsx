@@ -1,8 +1,13 @@
 import React from "react";
 import '../Styles/AgendarCita.css';
+import { useNavigate } from "react-router-dom";
 
 export default function AgendarCita(){
+const navigate = useNavigate();
 
+    const handleRegistrarCita = () => {
+    navigate("/Registro"); 
+    }
      const Cita = [
         { id: 1, nombre: "Ana", cedula: 25 ,telefono:1, fecha:'0:0:0',hora:1,motivo:"nada",nota:"nda"},
         { id: 2, nombre: "Luis", cedula: 30 ,telefono:1,fecha:'0:0:0',hora:1,motivo:"nada",nota:"nda"},
@@ -15,7 +20,7 @@ export default function AgendarCita(){
                 <h1>Agendar Cita</h1>
             </div>
             <div className="container-btn">
-                <button className="btn-agendar">Agregar Cita</button>
+                <button onClick={handleRegistrarCita}className="btn-agendar">Agregar Cita</button>
             </div>
             <div>
                 <table style={{ borderCollapse: "collapse", width: "100%" }}>
