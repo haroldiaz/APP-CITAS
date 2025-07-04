@@ -1,9 +1,24 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import '../Styles/AgendarCita.css';
 import { useNavigate } from "react-router-dom";
 
 export default function AgendarCita(){
 const navigate = useNavigate();
+
+    const [nombre, setNombre] = useState('');
+
+    const cargarDato =() =>{
+       setNombre(localStorage.getItem('nombre'));
+    }
+
+     // Cargar del localStorage al iniciar
+      useEffect(() => {
+        const nombreGuardado = localStorage.getItem('nombre');
+       
+        if (nombreGuardado) {
+          setNombre(nombreGuardado);
+        }
+      }, []);
 
     const handleRegistrarCita = () => {
     navigate("/Registro"); 
@@ -18,7 +33,9 @@ const navigate = useNavigate();
         <div className="container-cita">
             <div className="container-banner">
                 <h1>Agendar Cita</h1>
+                <h2>{nombre}</h2>
             </div>
+
             <div className="container-btn">
                 <button onClick={handleRegistrarCita}className="btn-agendar">Agregar Cita</button>
             </div>
