@@ -1,35 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import '../Styles/Registro.css'
-import { circularProgressClasses } from '@mui/material/CircularProgress';
 
  export default function Registro(){
  
     const [nombre, setNombre] = useState('');
-    const [edad, setEdad] = useState('');
- 
-   const [citas, setCitas] = useState(() => {
-  try {
-    const guardadas = localStorage.getItem('citas');
-    const parseadas = guardadas ? JSON.parse(guardadas) : [];
-    return Array.isArray(parseadas) ? parseadas : [];
-  } catch (e) {
-    return [];
-  }
-});
-const nuevoId = citas.length > 0
+    const [cedula, setCedula] = useState('');
+    const [telefono, setTelefono] = useState('');
+
+    const [citas, setCitas] = useState(() => {
+    try {
+        const guardadas = localStorage.getItem('citas');
+        const parseadas = guardadas ? JSON.parse(guardadas) : [];
+        
+        return Array.isArray(parseadas) ? parseadas : [];
+            } catch (e) 
+            {
+                return [];
+            }
+        }
+    );
+
+    const nuevoId = citas.length > 0
     ? Math.max(...citas.map(c => c.id)) + 1
     : 1;
     const agregarCita = (e) => {
     e.preventDefault();
 
-    if (nombre.trim() === '' || edad.trim() === '') return;
+    if (nombre.trim() === '' || cedula.trim() === '') return;
 
     
     
     const nuevaCita = {
       id:nuevoId, // ID único
       nombre,
-      edad: parseInt(edad)
+      cedula: parseInt(cedula),
+      telefono
 
     };
     const nuevaLista = [...citas, nuevaCita];
@@ -40,13 +45,14 @@ const nuevoId = citas.length > 0
     localStorage.setItem('citas', JSON.stringify(nuevaLista));
 
     setNombre('');
-    setEdad('');
+    setCedula('');
+    setTelefono('');
     }
     
     // Cargar del localStorage al iniciar
     useEffect(() => {
         
-       //localStorage.removeItem('citas');
+      // localStorage.removeItem('citas');
         const listaGuardada = localStorage.getItem('citas');
         console.log("Lista cargada:", listaGuardada);
        
@@ -77,13 +83,23 @@ const nuevoId = citas.length > 0
                             />
                         </div>
                         <div className="inputs">
-                            <label>Documento:</label>
+                            <label>Cedula:</label>
                             <input 
                                 type="text" 
-                                name="Nombre"
-                                value={edad}
-                                onChange={(e) => setEdad(e.target.value)}
-                                placeholder='Escribe tu edad'
+                                name="Cedula"
+                                value={cedula}
+                                onChange={(e) => setCedula(e.target.value)}
+                                placeholder='Escribe tu Cedula'
+                            />
+                        </div>
+                        <div className="inputs">
+                            <label>Telefono:</label>
+                            <input 
+                                type="text" 
+                                name="Telefono"
+                                value={telefono}
+                                onChange={(e) => setTelefono(e.target.value)}
+                                placeholder='Escribe tu Telefono'
                             />
                         </div>
                        

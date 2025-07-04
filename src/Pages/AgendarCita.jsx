@@ -5,35 +5,45 @@ import { useNavigate } from "react-router-dom";
 export default function AgendarCita(){
 const navigate = useNavigate();
 
-    const [nombre, setNombre] = useState('');
-
-    const cargarDato =() =>{
-       setNombre(localStorage.getItem('nombre'));
-    }
-
-     // Cargar del localStorage al iniciar
-      useEffect(() => {
-        const nombreGuardado = localStorage.getItem('nombre');
+    
+     const [citas, setCitas] = useState(() => {
+        try {
+            const guardadas = localStorage.getItem('citas');
+            const parseadas = guardadas ? JSON.parse(guardadas) : [];
+            
+            return Array.isArray(parseadas) ? parseadas : [];
+                } catch (e) 
+                {
+                    return [];
+                }
+            }
+        );
+   
+ 
+    // Cargar del localStorage al iniciar
+    useEffect(() => {
+        
+       //localStorage.removeItem('citas');
+        const listaGuardada = localStorage.getItem('citas');
+        console.log("Lista cargada:", listaGuardada);
        
-        if (nombreGuardado) {
-          setNombre(nombreGuardado);
+        if (listaGuardada) {
+        setCitas(JSON.parse(listaGuardada));
         }
-      }, []);
+
+        
+
+    }, []);
 
     const handleRegistrarCita = () => {
     navigate("/Registro"); 
     }
-     const Cita = [
-        { id: 1, nombre: "Ana", cedula: 25 ,telefono:1, fecha:'0:0:0',hora:1,motivo:"nada",nota:"nda"},
-        { id: 2, nombre: "Luis", cedula: 30 ,telefono:1,fecha:'0:0:0',hora:1,motivo:"nada",nota:"nda"},
-        { id: 3, nombre: "María", cedula: 28,telefono:1,fecha:'0:0:0',hora:1,motivo:"nada",nota:"nda"},
-        { id: 4, nombre: "María", cedula: 28,telefono:1,fecha:'0:0:0',hora:1,motivo:"nada",nota:"nda"},
-    ];
+  
     return(
         <div className="container-cita">
             <div className="container-banner">
                 <h1>Agendar Cita</h1>
-                <h2>{nombre}</h2>
+                
             </div>
 
             <div className="container-btn">
@@ -54,19 +64,18 @@ const navigate = useNavigate();
                     </tr>
                 </thead>
                 <tbody>
-                    {Cita.map((persona) => (
-                    <tr key={persona.id}>
-                        <td style={tdStyle}>{persona.id}</td>
-                        <td style={tdStyle}>{persona.nombre}</td>
-                        <td style={tdStyle}>{persona.cedula}</td>
-                        <td style={tdStyle}>{persona.telefono}</td>
-                        <td style={tdStyle}>{persona.fecha}</td>
-                        <td style={tdStyle}>{persona.hora}</td>
-                        <td style={tdStyle}>{persona.motivo}</td>
-                        <td style={tdStyle}>{persona.nota}</td>
-                        
-                    </tr>
-        ))}
+                    {citas.map((cita) => (
+                    <tr key={cita.id}>
+                <td style={tdStyle}>{cita.id}</td>
+                <td style={tdStyle}>{cita.nombre}</td>
+                <td style={tdStyle}>{cita.cedula || ''}</td>
+                <td style={tdStyle}>{cita.telefono || ''}</td>
+                <td style={tdStyle}>{cita.fecha || ''}</td>
+                <td style={tdStyle}>{cita.hora || ''}</td>
+                <td style={tdStyle}>{cita.motivo || ''}</td>
+                <td style={tdStyle}>{cita.nota || ''}</td>
+              </tr>
+            ))}
       </tbody>
     </table>
             </div>
@@ -74,13 +83,21 @@ const navigate = useNavigate();
     );
 }
 const thStyle = {
-  border: "1px solid #ddd",
-  padding: "8px",
-  backgroundColor: "#f2f2f2",
+  padding: "14px 16px",
+  backgroundColor: "#f5f5f5",
+  color: "#333",
+  fontSize: "11px",
+  fontWeight: "600",
   textAlign: "left",
+  textTransform: "uppercase",
+  letterSpacing: "0.6px",
+  borderBottom: "1px solid #ddd"
 };
 
 const tdStyle = {
-  border: "1px solid #ddd",
-  padding: "8px",
+  padding: "12px 16px",
+  fontSize: "11px",
+  color: "#444",
+  borderBottom: "1px solid #eee",
+  backgroundColor: "#fff"
 };
