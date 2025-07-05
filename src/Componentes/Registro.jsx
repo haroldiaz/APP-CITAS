@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../Styles/Registro.css'
-
+import Button from '@mui/material/Button';
  export default function Registro(){
  
     const [nombre, setNombre] = useState('');
@@ -67,7 +67,7 @@ import '../Styles/Registro.css'
         return (
             <div className="container-registro">
                 
-                <div className="container-banner">
+                <div className="cont-banner">
                 <h1>Registro de Cita</h1>
                 </div>
               
@@ -103,7 +103,7 @@ import '../Styles/Registro.css'
                             />
                         </div>
                        
-                         <button type="submit" onClick={agregarCita}>Registrar Cita</button>
+                         <Button variant='contained' type="submit" onClick={agregarCita}>Registrar Cita</Button>
                     </form>
                 </div>
             </div>

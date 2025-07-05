@@ -8,17 +8,17 @@
 
 ## Funcionalidades
 
-    - Gestión de Citas
-        - Visualizar
-        - Agregar 
-        - Editar 
-        - Eliminar 
+- Gestión de Citas
+    - Visualizar
+    - Agregar 
+    - Editar 
+    - Eliminar 
         
 
 ## Tecnologias Usadas
     
-    - React js
-    - Material Ui
+- React js
+- Material Ui
 
 
 ## 🚀 Cómo iniciar

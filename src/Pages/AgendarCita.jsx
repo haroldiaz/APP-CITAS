@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../Styles/AgendarCita.css';
 import { useNavigate } from "react-router-dom";
-
+import Button from '@mui/material/Button';
 export default function AgendarCita(){
 const navigate = useNavigate();
 
@@ -47,7 +47,7 @@ const navigate = useNavigate();
             </div>
 
             <div className="container-btn">
-                <button onClick={handleRegistrarCita}className="btn-agendar">Agregar Cita</button>
+                <Button variant="contained" onClick={handleRegistrarCita} >Agregar Cita</Button>
             </div>
             <div>
                 <table style={{ borderCollapse: "collapse", width: "100%" }}>
@@ -66,14 +66,14 @@ const navigate = useNavigate();
                 <tbody>
                     {citas.map((cita) => (
                     <tr key={cita.id}>
-                <td style={tdStyle}>{cita.id}</td>
-                <td style={tdStyle}>{cita.nombre}</td>
-                <td style={tdStyle}>{cita.cedula || ''}</td>
-                <td style={tdStyle}>{cita.telefono || ''}</td>
-                <td style={tdStyle}>{cita.fecha || ''}</td>
-                <td style={tdStyle}>{cita.hora || ''}</td>
-                <td style={tdStyle}>{cita.motivo || ''}</td>
-                <td style={tdStyle}>{cita.nota || ''}</td>
+                    <td style={tdStyle}>{cita.id}</td>
+                    <td style={tdStyle}>{cita.nombre}</td>
+                    <td style={tdStyle}>{cita.cedula || ''}</td>
+                    <td style={tdStyle}>{cita.telefono || ''}</td>
+                    <td style={tdStyle}>{cita.fecha || ''}</td>
+                    <td style={tdStyle}>{cita.hora || ''}</td>
+                    <td style={tdStyle}>{cita.motivo || ''}</td>
+                    <td style={tdStyle}>{cita.nota || ''}</td>
               </tr>
             ))}
       </tbody>
