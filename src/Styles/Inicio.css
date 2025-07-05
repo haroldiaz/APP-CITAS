@@ -1,20 +1,21 @@
 
+
 div{
     display: flex;
     justify-content: center;
 }
-.container-main{
-    margin: 50px;
-    display: block;
-    justify-content: center;
-    justify-items: center;
-    align-items: center;
+.container-main {
+  margin: 50px;
+  display: flex;
+  flex-direction: column;    /* Coloca los elementos uno debajo del otro */
+  justify-content: center;   /* Centra verticalmente */
+  align-items: center;       /* Centra horizontalmente */
 
-    height: 400px;
-    width: 400px;
-    background-color: rgb(250, 250, 250);
-    border: 1px solid black;        
-    border-radius: 10px;
+  height: 400px;
+  width: 400px;
+  background-color: rgb(250, 250, 250);
+  border: 1px solid rgb(189, 189, 189);        
+  border-radius: 10px;
 }
 .btn {
   display: inline-block;
