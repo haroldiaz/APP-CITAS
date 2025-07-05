@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import '../Styles/Registro.css'
 import Button from '@mui/material/Button';
+import CheckIcon from '@mui/icons-material/Check';
+
+import Alert from '@mui/material/Alert';
  export default function Registro(){
  
+    const [mostrarAlerta, setMostrarAlerta] = useState(false);
+
     const [nombre, setNombre] = useState('');
     const [cedula, setCedula] = useState('');
     const [telefono, setTelefono] = useState('');
 
+    //crea una lista
     const [citas, setCitas] = useState(() => {
     try {
         const guardadas = localStorage.getItem('citas');
@@ -47,11 +53,13 @@ import Button from '@mui/material/Button';
     setNombre('');
     setCedula('');
     setTelefono('');
+    activarAlert();
     }
     
     // Cargar del localStorage al iniciar
     useEffect(() => {
         
+         setMostrarAlerta(false);
       // localStorage.removeItem('citas');
         const listaGuardada = localStorage.getItem('citas');
         console.log("Lista cargada:", listaGuardada);
@@ -64,6 +72,13 @@ import Button from '@mui/material/Button';
 
     }, []);
 
+    const activarAlert = () => {
+   
+    setMostrarAlerta(true);
+
+    // Opcional: ocultar la alerta después de unos segundos
+    setTimeout(() => setMostrarAlerta(false), 3000);
+  };
         return (
             <div className="container-registro">
                 
@@ -105,7 +120,16 @@ import Button from '@mui/material/Button';
                        
                          <Button variant='contained' type="submit" onClick={agregarCita}>Registrar Cita</Button>
                     </form>
+                    
                 </div>
+            <div>
+                 {mostrarAlerta && (
+                    <Alert variant="outlined" icon={<CheckIcon fontSize="inherit" />} severity="success">
+                    ¡Se registro la cita con exito!
+                    </Alert>
+                     )}
             </div>
+            </div>
+
         );
     }
