@@ -35,7 +35,10 @@ export default function Registro() {
       return [];
     }
   });
-
+  const [fecha, setFecha] = useState('');
+  const [hora, setHora] = useState('');
+  const [motivo, setMotivo] = useState('');
+  const [nota ,setNota] = useState('');
   const nuevoId =
     citas.length > 0 ? Math.max(...citas.map((c) => c.id)) + 1 : 1;
 
@@ -56,6 +59,10 @@ export default function Registro() {
       nombre,
       cedula: parseInt(cedula),
       telefono,
+      fecha,
+      hora,
+      motivo,
+      nota
     };
 
     const nuevaLista = [...citas, nuevaCita];
@@ -65,6 +72,9 @@ export default function Registro() {
     setNombre('');
     setCedula('');
     setTelefono('');
+    setMotivo('');
+    setNota('');
+    
     activarAlert();
   };
 
@@ -115,6 +125,39 @@ export default function Registro() {
               fullWidth
               value={telefono}
               onChange={(e) => setTelefono(e.target.value)}
+            />
+            <TextField
+            label="Fecha de la Cita"
+            type="date"
+            value={fecha}
+            onChange={(e) => setFecha(e.target.value)}
+            fullWidth
+            InputLabelProps={{ shrink: true }}
+            margin="normal"
+          />
+
+          <TextField
+            label="Hora de la Cita"
+            type="time"
+            value={hora}
+            onChange={(e) => setHora(e.target.value)}
+            fullWidth
+            InputLabelProps={{ shrink: true }}
+            margin="normal"
+          />
+          <TextField
+              label="Motivo"
+              variant="outlined"
+              fullWidth
+              value={motivo}
+              onChange={(e) => setMotivo(e.target.value)}
+            />
+           <TextField
+              label="Nota"
+              variant="outlined"
+              fullWidth
+              value={nota}
+              onChange={(e) => setNota(e.target.value)}
             />
             <Button variant="contained" type="submit">
               Registrar Cita
