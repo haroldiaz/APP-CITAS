@@ -31,3 +31,10 @@ cd tu_repositorio
 npm install
 npm run start
 ```
+
+## Librerias Utilizadas
+```bash
+    npm install material-ui
+    npm install react-router-dom
+    npm install framer-motion
+```
