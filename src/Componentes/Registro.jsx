@@ -1,135 +1,142 @@
 import React, { useState, useEffect } from 'react';
-import '../Styles/Registro.css'
+import '../Styles/Registro.css';
+
 import Button from '@mui/material/Button';
-import CheckIcon from '@mui/icons-material/Check';
-
+import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
- export default function Registro(){
- 
-    const [mostrarAlerta, setMostrarAlerta] = useState(false);
+import CheckIcon from '@mui/icons-material/Check';
+import Stack from '@mui/material/Stack';
 
-    const [nombre, setNombre] = useState('');
-    const [cedula, setCedula] = useState('');
-    const [telefono, setTelefono] = useState('');
+// Variable del componente
+const alertaError = (
+  <Alert
+    variant="outlined"
+    icon={<CheckIcon fontSize="inherit" />}
+    severity="error"
+  >
+    No ingreso un valor valido
+  </Alert>
+  
+);
+export default function Registro() {
+  const [mostrarAlerta, setMostrarAlerta] = useState(false);
 
-    //crea una lista
-    const [citas, setCitas] = useState(() => {
+  const [error, setError] = useState(false);
+  const [nombre, setNombre] = useState('');
+  const [cedula, setCedula] = useState('');
+  const [telefono, setTelefono] = useState('');
+
+  const [citas, setCitas] = useState(() => {
     try {
-        const guardadas = localStorage.getItem('citas');
-        const parseadas = guardadas ? JSON.parse(guardadas) : [];
-        
-        return Array.isArray(parseadas) ? parseadas : [];
-            } catch (e) 
-            {
-                return [];
-            }
-        }
-    );
+      const guardadas = localStorage.getItem('citas');
+      const parseadas = guardadas ? JSON.parse(guardadas) : [];
+      return Array.isArray(parseadas) ? parseadas : [];
+    } catch (e) {
+      return [];
+    }
+  });
 
-    const nuevoId = citas.length > 0
-    ? Math.max(...citas.map(c => c.id)) + 1
-    : 1;
-    const agregarCita = (e) => {
+  const nuevoId =
+    citas.length > 0 ? Math.max(...citas.map((c) => c.id)) + 1 : 1;
+
+  const agregarCita = (e) => {
     e.preventDefault();
 
     if (nombre.trim() === '' || cedula.trim() === '') return;
 
-    
-    
+    const cedulaNum = Number(cedula);
+    if (!Number.isInteger(cedulaNum)) {
+      console.log("No es un entero la cédula");
+     activarError();
+      return;
+    }
+
     const nuevaCita = {
-      id:nuevoId, // ID único
+      id: nuevoId,
       nombre,
       cedula: parseInt(cedula),
-      telefono
-
+      telefono,
     };
-    const nuevaLista = [...citas, nuevaCita];
-   
 
+    const nuevaLista = [...citas, nuevaCita];
     setCitas(nuevaLista);
-    console.log(nuevaLista);
     localStorage.setItem('citas', JSON.stringify(nuevaLista));
 
     setNombre('');
     setCedula('');
     setTelefono('');
     activarAlert();
+  };
+
+  useEffect(() => {
+    setMostrarAlerta(false);
+    const listaGuardada = localStorage.getItem('citas');
+    if (listaGuardada) {
+      setCitas(JSON.parse(listaGuardada));
     }
-    
-    // Cargar del localStorage al iniciar
-    useEffect(() => {
-        
-         setMostrarAlerta(false);
-      // localStorage.removeItem('citas');
-        const listaGuardada = localStorage.getItem('citas');
-        console.log("Lista cargada:", listaGuardada);
-       
-        if (listaGuardada) {
-        setCitas(JSON.parse(listaGuardada));
-        }
+  }, []);
 
-        
-
-    }, []);
-
-    const activarAlert = () => {
-   
+  const activarAlert = () => {
     setMostrarAlerta(true);
-
-    // Opcional: ocultar la alerta después de unos segundos
     setTimeout(() => setMostrarAlerta(false), 3000);
   };
-        return (
-            <div className="container-registro">
-                
-                <div className="cont-banner">
-                <h1>Registro de Cita</h1>
-                </div>
-              
-                <div className="container-formulario">
-                    <form onSubmit={agregarCita}>
-                        <div className="inputs">
-                            <label>Nombre:</label>
-                            <input
-                                type="text"
-                                value={nombre}
-                                onChange={(e) => setNombre(e.target.value)}
-                                placeholder="Escribe tu nombre"
-                            />
-                        </div>
-                        <div className="inputs">
-                            <label>Cedula:</label>
-                            <input 
-                                type="text" 
-                                name="Cedula"
-                                value={cedula}
-                                onChange={(e) => setCedula(e.target.value)}
-                                placeholder='Escribe tu Cedula'
-                            />
-                        </div>
-                        <div className="inputs">
-                            <label>Telefono:</label>
-                            <input 
-                                type="text" 
-                                name="Telefono"
-                                value={telefono}
-                                onChange={(e) => setTelefono(e.target.value)}
-                                placeholder='Escribe tu Telefono'
-                            />
-                        </div>
-                       
-                         <Button variant='contained' type="submit" onClick={agregarCita}>Registrar Cita</Button>
-                    </form>
-                    
-                </div>
-            <div>
-                 {mostrarAlerta && (
-                    <Alert variant="outlined" icon={<CheckIcon fontSize="inherit" />} severity="success">
-                    ¡Se registro la cita con exito!
-                    </Alert>
-                     )}
-            </div>
-            </div>
 
-        );
-    }
+  const activarError = () => {
+    setError(true);
+    setTimeout(() => setError(false), 3000);
+  }
+
+  return (
+    <div className="container-registro">
+      <div className="cont-banner">
+        <h1>Registro de Cita</h1>
+      </div>
+
+      <div className="container-formulario">
+        <form onSubmit={agregarCita}>
+          <Stack spacing={2}>
+            <TextField
+              label="Nombre"
+              variant="outlined"
+              fullWidth
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+            />
+            <TextField
+              label="Cédula"
+              variant="outlined"
+              fullWidth
+              value={cedula}
+              onChange={(e) => setCedula(e.target.value)}
+            />
+            <TextField
+              label="Teléfono"
+              variant="outlined"
+              fullWidth
+              value={telefono}
+              onChange={(e) => setTelefono(e.target.value)}
+            />
+            <Button variant="contained" type="submit">
+              Registrar Cita
+            </Button>
+          </Stack>
+        </form>
+      </div>
+
+      <div style={{ marginTop: '20px' }}>
+        {mostrarAlerta && (
+          <Alert
+            variant="outlined"
+            icon={<CheckIcon fontSize="inherit" />}
+            severity="success"
+          >
+            ¡Se registró la cita con éxito!
+          </Alert>
+        )}
+        { error && (alertaError)
+          
+        }
+      </div>
+    </div>
+  );
+}

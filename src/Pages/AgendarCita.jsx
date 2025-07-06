@@ -85,7 +85,7 @@ export default function AgendarCita() {
           </Button>
         </div>
 
-        <div>
+        <div className="tabla-container">
           <table style={{ borderCollapse: "collapse", width: "100%" }}>
             <thead>
               <tr>
@@ -153,15 +153,15 @@ export default function AgendarCita() {
               </tbody>
             </AnimatePresence>
           </table>
+
           {citas.length > citasPorPagina && (
-            <div style={{ marginTop: "20px", textAlign: "center" }}>
+            <div className="paginacion">
               {[...Array(totalPaginas)].map((_, i) => (
                 <Button
                   key={i}
                   onClick={() => setPaginaActual(i + 1)}
                   variant={paginaActual === i + 1 ? "contained" : "outlined"}
                   size="small"
-                  style={{ margin: "0 5px" }}
                 >
                   {i + 1}
                 </Button>
@@ -184,13 +184,18 @@ export default function AgendarCita() {
             }
           }}
         >
-          <DialogTitle>Editar Cita</DialogTitle>
+          <DialogTitle style={{ backgroundColor: "rgb(222, 234, 244)" }}>
+            Editar Cita
+          </DialogTitle>
           <DialogContent
             dividers
             style={{
               padding: '32px',
               overflowY: 'auto',
               maxHeight: 'calc(100% - 100px)',
+              maxWidth: '600px',
+              width: '600px',
+              height: '600px',
             }}
           >
             {citaSeleccionada && (
@@ -228,18 +233,6 @@ export default function AgendarCita() {
                   onChange={(e) => setCitaSeleccionada({ ...citaSeleccionada, hora: e.target.value })}
                   fullWidth
                   InputLabelProps={{ shrink: true }}
-                />
-                <TextField
-                  label="Motivo"
-                  value={citaSeleccionada.motivo}
-                  onChange={(e) => setCitaSeleccionada({ ...citaSeleccionada, motivo: e.target.value })}
-                  fullWidth
-                />
-                <TextField
-                  label="Nota"
-                  value={citaSeleccionada.nota}
-                  onChange={(e) => setCitaSeleccionada({ ...citaSeleccionada, nota: e.target.value })}
-                  fullWidth
                 />
               </div>
             )}
