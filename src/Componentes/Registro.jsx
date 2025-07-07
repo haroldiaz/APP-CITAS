@@ -3,13 +3,17 @@ import '../Styles/Registro.css';
 
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import Alert from '@mui/material/Alert';
-import CheckIcon from '@mui/icons-material/Check';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import DenseAppBar from './DenseAppBar';
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 export default function Registro() {
-  const [mostrarAlerta, setMostrarAlerta] = useState(false);
+  const [mostrarSnackbar, setMostrarSnackbar] = useState(false);
 
   const [nombre, setNombre] = useState('');
   const [cedula, setCedula] = useState('');
@@ -80,12 +84,12 @@ export default function Registro() {
     setMotivo('');
     setNota('');
     setErrores({});
-    activarAlerta();
+    setMostrarSnackbar(true); // Mostrar el snackbar
   };
 
-  const activarAlerta = () => {
-    setMostrarAlerta(true);
-    setTimeout(() => setMostrarAlerta(false), 3000);
+  const handleCloseSnackbar = (_, reason) => {
+    if (reason === 'clickaway') return;
+    setMostrarSnackbar(false);
   };
 
   useEffect(() => {
@@ -175,17 +179,17 @@ export default function Registro() {
           </form>
         </div>
 
-        <div style={{ marginTop: '20px' }}>
-          {mostrarAlerta && (
-            <Alert
-              variant="outlined"
-              icon={<CheckIcon fontSize="inherit" />}
-              severity="success"
-            >
-              ¡Se registró la cita con éxito!
-            </Alert>
-          )}
-        </div>
+        {/* SNACKBAR DE ÉXITO */}
+        <Snackbar
+          open={mostrarSnackbar}
+          autoHideDuration={2000}
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        >
+          <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
+            ¡Se registró la cita con éxito!
+          </Alert>
+        </Snackbar>
       </div>
     </div>
   );
