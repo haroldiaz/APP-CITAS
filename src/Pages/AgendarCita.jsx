@@ -31,9 +31,12 @@ export default function AgendarCita() {
   const [paginaActual, setPaginaActual] = useState(1);
   const citasPorPagina = 5;
   const [filaEliminando, setFilaEliminando] = useState(null);
-
   const [filtroNombre, setFiltroNombre] = useState('');
   const [filtroFecha, setFiltroFecha] = useState('');
+
+  // Confirmación eliminación
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+  const [citaParaEliminar, setCitaParaEliminar] = useState(null);
 
   useEffect(() => {
     const listaGuardada = localStorage.getItem('citas');
@@ -46,13 +49,20 @@ export default function AgendarCita() {
     navigate("/Registro");
   };
 
-  const handleEliminar = (id) => {
-    setFilaEliminando(id);
+  const confirmarEliminar = (cita) => {
+    setCitaParaEliminar(cita);
+    setOpenConfirmDialog(true);
+  };
+
+  const confirmarEliminacion = () => {
+    setOpenConfirmDialog(false);
+    setFilaEliminando(citaParaEliminar.id);
     setTimeout(() => {
-      const nuevasCitas = citas.filter((cita) => cita.id !== id);
+      const nuevasCitas = citas.filter((cita) => cita.id !== citaParaEliminar.id);
       setCitas(nuevasCitas);
       localStorage.setItem('citas', JSON.stringify(nuevasCitas));
       setFilaEliminando(null);
+      setCitaParaEliminar(null);
     }, 300);
   };
 
@@ -87,14 +97,13 @@ export default function AgendarCita() {
     <AnimatedPage>
       <DenseAppBar name="Agendar Cita" />
       <div className="container-cita">
-        
 
-        {/* FILTROS CON PAPER */}
+        {/* FILTROS */}
         <Paper
           elevation={2}
           sx={{
             padding: 2,
-            marginTop:6,
+            marginTop: 6,
             marginBottom: 4,
             borderRadius: 2,
             backgroundColor: '#f9f9f9',
@@ -102,7 +111,7 @@ export default function AgendarCita() {
             gap: 2,
             flexWrap: 'wrap',
             alignItems: 'center',
-            width:'600px'
+            width: '600px'
           }}
         >
           <TextField
@@ -130,6 +139,7 @@ export default function AgendarCita() {
           </Button>
         </Paper>
 
+        {/* TABLA */}
         <div className="tabla-container">
           <table style={{ borderCollapse: "collapse", width: "100%" }}>
             <thead>
@@ -179,7 +189,7 @@ export default function AgendarCita() {
                         variant="outlined"
                         color="error"
                         size="small"
-                        onClick={() => handleEliminar(cita.id)}
+                        onClick={() => confirmarEliminar(cita)}
                       >
                         Eliminar
                       </Button>
@@ -288,6 +298,16 @@ export default function AgendarCita() {
             <Button onClick={handleGuardarEdicion} variant="contained" color="primary">Guardar</Button>
           </DialogActions>
         </Dialog>
+
+        {/* MODAL CONFIRMAR ELIMINACIÓN */}
+        <Dialog open={openConfirmDialog} onClose={() => setOpenConfirmDialog(false)}>
+          <DialogTitle>¿Estás seguro que deseas eliminar esta cita?</DialogTitle>
+          <DialogActions>
+            <Button onClick={() => setOpenConfirmDialog(false)} color="secondary">Cancelar</Button>
+            <Button onClick={confirmarEliminacion} color="error" variant="contained">Eliminar</Button>
+          </DialogActions>
+        </Dialog>
+
       </div>
     </AnimatedPage>
   );
