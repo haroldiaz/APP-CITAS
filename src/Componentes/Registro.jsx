@@ -102,8 +102,7 @@ export default function Registro() {
     <DenseAppBar name="Registro Cita"></DenseAppBar>
   
     <div className="container-registro">
-      
-      
+
       <div className="container-formulario">
         <form onSubmit={agregarCita}>
           <Stack spacing={2}>

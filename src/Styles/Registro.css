@@ -1,9 +1,9 @@
 .container-registro {
   display: block;
   max-width: 620px;
-  margin: 20px auto;
+  margin: 10px auto;
   border: 1px solid rgb(215, 215, 215);
-  padding: 24px;
+  padding: 10px;
   background-color: #ffffff;
   border-radius: 16px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
@@ -45,7 +45,6 @@
 
 .container-formulario
 {
- 
-  padding: 4%;
-  margin: 20px;
+  padding: 2%;
+  margin:10px;
 } 

@@ -5,18 +5,6 @@
   justify-content: center;
 }
 
-.container-btn {
-  background-color: #ffffff;
-  width: 800px;
-  height: 60px;
-  margin: 0 auto 20px auto;
-  border-radius: 10px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding-right: 20px;
-}
-
 .btn-agendar {
   font-size: 18px;
 }

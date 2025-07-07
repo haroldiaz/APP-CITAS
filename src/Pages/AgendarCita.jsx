@@ -10,7 +10,9 @@ import TextField from '@mui/material/TextField';
 import AddIcon from '@mui/icons-material/Add';
 import AnimatedPage from '../Componentes/AnimatePage';
 import { motion, AnimatePresence } from 'framer-motion';
-import DenseAppBar  from '../Componentes/DenseAppBar.jsx';
+import DenseAppBar from '../Componentes/DenseAppBar.jsx';
+import Paper from '@mui/material/Paper';
+
 export default function AgendarCita() {
   const navigate = useNavigate();
 
@@ -29,6 +31,9 @@ export default function AgendarCita() {
   const [paginaActual, setPaginaActual] = useState(1);
   const citasPorPagina = 5;
   const [filaEliminando, setFilaEliminando] = useState(null);
+
+  const [filtroNombre, setFiltroNombre] = useState('');
+  const [filtroFecha, setFiltroFecha] = useState('');
 
   useEffect(() => {
     const listaGuardada = localStorage.getItem('citas');
@@ -65,23 +70,65 @@ export default function AgendarCita() {
     setOpenDialog(false);
   };
 
-  const totalPaginas = Math.ceil(citas.length / citasPorPagina);
-  const citasPaginadas = citas.slice((paginaActual - 1) * citasPorPagina, paginaActual * citasPorPagina);
+  const citasFiltradas = citas.filter((cita) => {
+    const coincideNombre = cita.nombre.toLowerCase().includes(filtroNombre.toLowerCase());
+    const coincideFecha = filtroFecha === '' || cita.fecha === filtroFecha;
+    return coincideNombre && coincideFecha;
+  });
+
+  const totalPaginas = Math.ceil(citasFiltradas.length / citasPorPagina);
+
+  const citasPaginadas = citasFiltradas.slice(
+    (paginaActual - 1) * citasPorPagina,
+    paginaActual * citasPorPagina
+  );
 
   return (
     <AnimatedPage>
-       <DenseAppBar name="Agendar Cita"></DenseAppBar >
+      <DenseAppBar name="Agendar Cita" />
       <div className="container-cita">
         
-        <div className="container-btn">
-          <Button 
-            variant="contained" 
+
+        {/* FILTROS CON PAPER */}
+        <Paper
+          elevation={2}
+          sx={{
+            padding: 2,
+            marginTop:6,
+            marginBottom: 4,
+            borderRadius: 2,
+            backgroundColor: '#f9f9f9',
+            display: 'flex',
+            gap: 2,
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            width:'600px'
+          }}
+        >
+          <TextField
+            label="Filtrar por nombre"
+            variant="outlined"
+            size="small"
+            value={filtroNombre}
+            onChange={(e) => setFiltroNombre(e.target.value)}
+          />
+          <TextField
+            label="Filtrar por fecha"
+            type="date"
+            variant="outlined"
+            size="small"
+            value={filtroFecha}
+            onChange={(e) => setFiltroFecha(e.target.value)}
+            InputLabelProps={{ shrink: true }}
+          />
+          <Button
+            variant="contained"
             onClick={handleRegistrarCita}
             style={{ minWidth: '40px', padding: '8px' }}
           >
             <AddIcon />
           </Button>
-        </div>
+        </Paper>
 
         <div className="tabla-container">
           <table style={{ borderCollapse: "collapse", width: "100%" }}>
@@ -128,19 +175,19 @@ export default function AgendarCita() {
                     <td style={tdStyle}>{cita.motivo}</td>
                     <td style={tdStyle}>{cita.nota}</td>
                     <td style={tdStyle}>
-                      <Button 
-                        variant="outlined" 
-                        color="error" 
-                        size="small" 
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        size="small"
                         onClick={() => handleEliminar(cita.id)}
                       >
                         Eliminar
                       </Button>
-                      <Button 
-                        variant="outlined" 
-                        color="primary" 
-                        size="small" 
-                        onClick={() => handleEditar(cita)} 
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                        onClick={() => handleEditar(cita)}
                         style={{ marginLeft: '8px' }}
                       >
                         Editar
@@ -152,8 +199,8 @@ export default function AgendarCita() {
             </AnimatePresence>
           </table>
 
-          {citas.length > citasPorPagina && (
-            <div className="paginacion">
+          {totalPaginas > 1 && (
+            <div className="paginacion" style={{ marginTop: "16px" }}>
               {[...Array(totalPaginas)].map((_, i) => (
                 <Button
                   key={i}
@@ -168,6 +215,7 @@ export default function AgendarCita() {
           )}
         </div>
 
+        {/* MODAL EDICIÓN */}
         <Dialog
           open={openDialog}
           onClose={() => setOpenDialog(false)}
