@@ -8,24 +8,18 @@ import CheckIcon from '@mui/icons-material/Check';
 import Stack from '@mui/material/Stack';
 import DenseAppBar from './DenseAppBar';
 
-// Variable del componente
-const alertaError = (
-  <Alert
-    variant="outlined"
-    icon={<CheckIcon fontSize="inherit" />}
-    severity="error"
-  >
-    No ingreso un valor valido
-  </Alert>
-  
-);
 export default function Registro() {
   const [mostrarAlerta, setMostrarAlerta] = useState(false);
 
-  const [error, setError] = useState(false);
   const [nombre, setNombre] = useState('');
   const [cedula, setCedula] = useState('');
   const [telefono, setTelefono] = useState('');
+  const [fecha, setFecha] = useState('');
+  const [hora, setHora] = useState('');
+  const [motivo, setMotivo] = useState('');
+  const [nota, setNota] = useState('');
+
+  const [errores, setErrores] = useState({});
 
   const [citas, setCitas] = useState(() => {
     try {
@@ -36,24 +30,32 @@ export default function Registro() {
       return [];
     }
   });
-  const [fecha, setFecha] = useState('');
-  const [hora, setHora] = useState('');
-  const [motivo, setMotivo] = useState('');
-  const [nota ,setNota] = useState('');
-  const nuevoId =
-    citas.length > 0 ? Math.max(...citas.map((c) => c.id)) + 1 : 1;
+
+  const nuevoId = citas.length > 0 ? Math.max(...citas.map((c) => c.id)) + 1 : 1;
+
+  const validarFormulario = () => {
+    const nuevosErrores = {};
+
+    if (nombre.trim() === '') nuevosErrores.nombre = 'El nombre es obligatorio';
+    if (cedula.trim() === '') {
+      nuevosErrores.cedula = 'La cédula es obligatoria';
+    } else if (!/^\d+$/.test(cedula)) {
+      nuevosErrores.cedula = 'La cédula debe ser un número entero';
+    }
+
+    if (telefono.trim() === '') nuevosErrores.telefono = 'El teléfono es obligatorio';
+    if (fecha.trim() === '') nuevosErrores.fecha = 'La fecha es obligatoria';
+    if (hora.trim() === '') nuevosErrores.hora = 'La hora es obligatoria';
+    if (motivo.trim() === '') nuevosErrores.motivo = 'El motivo es obligatorio';
+
+    setErrores(nuevosErrores);
+    return Object.keys(nuevosErrores).length === 0;
+  };
 
   const agregarCita = (e) => {
     e.preventDefault();
 
-    if (nombre.trim() === '' || cedula.trim() === '') return;
-
-    const cedulaNum = Number(cedula);
-    if (!Number.isInteger(cedulaNum)) {
-      console.log("No es un entero la cédula");
-     activarError();
-      return;
-    }
+    if (!validarFormulario()) return;
 
     const nuevaCita = {
       id: nuevoId,
@@ -73,115 +75,118 @@ export default function Registro() {
     setNombre('');
     setCedula('');
     setTelefono('');
+    setFecha('');
+    setHora('');
     setMotivo('');
     setNota('');
-    
-    activarAlert();
+    setErrores({});
+    activarAlerta();
+  };
+
+  const activarAlerta = () => {
+    setMostrarAlerta(true);
+    setTimeout(() => setMostrarAlerta(false), 3000);
   };
 
   useEffect(() => {
-    setMostrarAlerta(false);
     const listaGuardada = localStorage.getItem('citas');
     if (listaGuardada) {
       setCitas(JSON.parse(listaGuardada));
     }
   }, []);
 
-  const activarAlert = () => {
-    setMostrarAlerta(true);
-    setTimeout(() => setMostrarAlerta(false), 3000);
-  };
-
-  const activarError = () => {
-    setError(true);
-    setTimeout(() => setError(false), 3000);
-  }
-
   return (
-   <div>
-    <DenseAppBar name="Registro Cita"></DenseAppBar>
-  
-    <div className="container-registro">
+    <div>
+      <DenseAppBar name="Registro Cita" />
 
-      <div className="container-formulario">
-        <form onSubmit={agregarCita}>
-          <Stack spacing={2}>
-            <TextField
-              label="Nombre"
-              variant="outlined"
-              fullWidth
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-            />
-            <TextField
-              label="Cédula"
-              variant="outlined"
-              fullWidth
-              value={cedula}
-              onChange={(e) => setCedula(e.target.value)}
-            />
-            <TextField
-              label="Teléfono"
-              variant="outlined"
-              fullWidth
-              value={telefono}
-              onChange={(e) => setTelefono(e.target.value)}
-            />
-            <TextField
-            label="Fecha de la Cita"
-            type="date"
-            value={fecha}
-            onChange={(e) => setFecha(e.target.value)}
-            fullWidth
-            InputLabelProps={{ shrink: true }}
-            margin="normal"
-          />
+      <div className="container-registro">
+        <div className="container-formulario">
+          <form onSubmit={agregarCita}>
+            <Stack spacing={2}>
+              <TextField
+                label="Nombre"
+                variant="outlined"
+                fullWidth
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                error={!!errores.nombre}
+                helperText={errores.nombre}
+              />
+              <TextField
+                label="Cédula"
+                variant="outlined"
+                fullWidth
+                value={cedula}
+                onChange={(e) => setCedula(e.target.value)}
+                error={!!errores.cedula}
+                helperText={errores.cedula}
+              />
+              <TextField
+                label="Teléfono"
+                variant="outlined"
+                fullWidth
+                value={telefono}
+                onChange={(e) => setTelefono(e.target.value)}
+                error={!!errores.telefono}
+                helperText={errores.telefono}
+              />
+              <TextField
+                label="Fecha de la Cita"
+                type="date"
+                value={fecha}
+                onChange={(e) => setFecha(e.target.value)}
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+                margin="normal"
+                error={!!errores.fecha}
+                helperText={errores.fecha}
+              />
+              <TextField
+                label="Hora de la Cita"
+                type="time"
+                value={hora}
+                onChange={(e) => setHora(e.target.value)}
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+                margin="normal"
+                error={!!errores.hora}
+                helperText={errores.hora}
+              />
+              <TextField
+                label="Motivo"
+                variant="outlined"
+                fullWidth
+                value={motivo}
+                onChange={(e) => setMotivo(e.target.value)}
+                error={!!errores.motivo}
+                helperText={errores.motivo}
+              />
+              <TextField
+                label="Nota"
+                variant="outlined"
+                fullWidth
+                value={nota}
+                onChange={(e) => setNota(e.target.value)}
+              />
+              <Button variant="contained" type="submit">
+                Registrar Cita
+              </Button>
+            </Stack>
+          </form>
+        </div>
 
-          <TextField
-            label="Hora de la Cita"
-            type="time"
-            value={hora}
-            onChange={(e) => setHora(e.target.value)}
-            fullWidth
-            InputLabelProps={{ shrink: true }}
-            margin="normal"
-          />
-          <TextField
-              label="Motivo"
+        <div style={{ marginTop: '20px' }}>
+          {mostrarAlerta && (
+            <Alert
               variant="outlined"
-              fullWidth
-              value={motivo}
-              onChange={(e) => setMotivo(e.target.value)}
-            />
-           <TextField
-              label="Nota"
-              variant="outlined"
-              fullWidth
-              value={nota}
-              onChange={(e) => setNota(e.target.value)}
-            />
-            <Button variant="contained" type="submit">
-              Registrar Cita
-            </Button>
-          </Stack>
-        </form>
-      </div>
-
-      <div style={{ marginTop: '20px' }}>
-        {mostrarAlerta && (
-          <Alert
-            variant="outlined"
-            icon={<CheckIcon fontSize="inherit" />}
-            severity="success"
-          >
-            ¡Se registró la cita con éxito!
-          </Alert>
-        )}
-        { error && (alertaError)
-          
-        }
+              icon={<CheckIcon fontSize="inherit" />}
+              severity="success"
+            >
+              ¡Se registró la cita con éxito!
+            </Alert>
+          )}
+        </div>
       </div>
     </div>
-     </div>
   );
 }
