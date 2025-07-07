@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
 import Stack from '@mui/material/Stack';
+import DenseAppBar from './DenseAppBar';
 
 // Variable del componente
 const alertaError = (
@@ -97,11 +98,12 @@ export default function Registro() {
   }
 
   return (
+   <div>
+    <DenseAppBar name="Registro Cita"></DenseAppBar>
+  
     <div className="container-registro">
-      <div className="cont-banner">
-        <h1>Registro de Cita</h1>
-      </div>
-
+      
+      
       <div className="container-formulario">
         <form onSubmit={agregarCita}>
           <Stack spacing={2}>
@@ -181,5 +183,6 @@ export default function Registro() {
         }
       </div>
     </div>
+     </div>
   );
 }

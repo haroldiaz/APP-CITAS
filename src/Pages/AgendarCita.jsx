@@ -10,7 +10,7 @@ import TextField from '@mui/material/TextField';
 import AddIcon from '@mui/icons-material/Add';
 import AnimatedPage from '../Componentes/AnimatePage';
 import { motion, AnimatePresence } from 'framer-motion';
-
+import DenseAppBar  from '../Componentes/DenseAppBar.jsx';
 export default function AgendarCita() {
   const navigate = useNavigate();
 
@@ -70,11 +70,9 @@ export default function AgendarCita() {
 
   return (
     <AnimatedPage>
+       <DenseAppBar name="Agendar Cita"></DenseAppBar >
       <div className="container-cita">
-        <div className="container-banner">
-          <h1>Agendar Cita</h1>
-        </div>
-
+        
         <div className="container-btn">
           <Button 
             variant="contained" 

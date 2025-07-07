@@ -14,6 +14,7 @@ export default function Inicio() {
   return (
     <div className="main-wrapper">
       <div className="container-main">
+       
         <h1>Registro de Citas Odontologicas</h1>
         <p className="descripcion">
           Aplicación web desarrollada en React que permite a los pacientes agendar, actualizar y eliminar citas odontológicas.

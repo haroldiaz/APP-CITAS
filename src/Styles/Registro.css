@@ -1,7 +1,7 @@
 .container-registro {
   display: block;
   max-width: 620px;
-  margin: 40px auto;
+  margin: 20px auto;
   border: 1px solid rgb(215, 215, 215);
   padding: 24px;
   background-color: #ffffff;
@@ -9,17 +9,7 @@
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
   font-family: "Inter", sans-serif;
 }
-.cont-banner{
-  width: 420px;
-  border-radius: 10px;
-  height: 100px;
-  border: 1px solid rgb(215, 215, 215);
-  background-color: rgb(255, 255, 255);
-  font-size: 14px;
-  
-  justify-content: center;
-  align-items: center;
-}
+
 .inputs {
   display: block;
   width: 100%;
