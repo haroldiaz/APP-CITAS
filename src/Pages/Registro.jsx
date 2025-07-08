@@ -22,6 +22,7 @@ export default function Registro() {
   const [hora, setHora] = useState('');
   const [motivo, setMotivo] = useState('');
   const [nota, setNota] = useState('');
+  const [estado, setEstado] = useState('en espera'); // NUEVO estado
 
   const [errores, setErrores] = useState({});
 
@@ -69,13 +70,15 @@ export default function Registro() {
       fecha,
       hora,
       motivo,
-      nota
+      nota,
+      estado // Se incluye el estado
     };
 
     const nuevaLista = [...citas, nuevaCita];
     setCitas(nuevaLista);
     localStorage.setItem('citas', JSON.stringify(nuevaLista));
 
+    // Limpiar campos
     setNombre('');
     setCedula('');
     setTelefono('');
@@ -83,6 +86,7 @@ export default function Registro() {
     setHora('');
     setMotivo('');
     setNota('');
+    setEstado('en espera');
     setErrores({});
     setMostrarSnackbar(true); // Mostrar el snackbar
   };
@@ -101,7 +105,7 @@ export default function Registro() {
 
   return (
     <div>
-      <Navbar title="Registrar Citas" /> {/* NUEVO NAVBAR */}
+      <Navbar title="Registrar Citas" />
 
       <div className="container-registro">
         <div className="container-formulario">
@@ -172,6 +176,18 @@ export default function Registro() {
                 value={nota}
                 onChange={(e) => setNota(e.target.value)}
               />
+              <TextField
+                select
+                label="Estado de la cita"
+                value={estado}
+                onChange={(e) => setEstado(e.target.value)}
+                SelectProps={{ native: true }}
+                fullWidth
+              >
+                <option value="en espera">En espera</option>
+                <option value="completado">Completado</option>
+              </TextField>
+
               <Button variant="contained" type="submit">
                 Registrar Cita
               </Button>
@@ -179,7 +195,6 @@ export default function Registro() {
           </form>
         </div>
 
-        {/* SNACKBAR DE ÉXITO */}
         <Snackbar
           open={mostrarSnackbar}
           autoHideDuration={2000}

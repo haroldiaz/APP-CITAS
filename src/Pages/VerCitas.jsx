@@ -7,8 +7,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import TextField from '@mui/material/TextField';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import AddIcon from '@mui/icons-material/Add';
-import AnimatedPage from '../Componentes/AnimatePage';
+import AnimatedPage from '../Componentes/AnimatePage.js';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '../Componentes/Navbar.jsx';
 import Paper from '@mui/material/Paper';
@@ -33,8 +35,8 @@ export default function AgendarCita() {
   const [filaEliminando, setFilaEliminando] = useState(null);
   const [filtroNombre, setFiltroNombre] = useState('');
   const [filtroFecha, setFiltroFecha] = useState('');
+  const [filtroEstado, setFiltroEstado] = useState(''); // nuevo filtro
 
-  // Confirmación eliminación
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [citaParaEliminar, setCitaParaEliminar] = useState(null);
 
@@ -83,7 +85,8 @@ export default function AgendarCita() {
   const citasFiltradas = citas.filter((cita) => {
     const coincideNombre = cita.nombre.toLowerCase().includes(filtroNombre.toLowerCase());
     const coincideFecha = filtroFecha === '' || cita.fecha === filtroFecha;
-    return coincideNombre && coincideFecha;
+    const coincideEstado = filtroEstado === '' || (cita.estado || 'En espera') === filtroEstado;
+    return coincideNombre && coincideFecha && coincideEstado;
   });
 
   const totalPaginas = Math.ceil(citasFiltradas.length / citasPorPagina);
@@ -95,12 +98,8 @@ export default function AgendarCita() {
 
   return (
     <AnimatedPage>
-      
-      
-      <Navbar title="Citas" /> {/* NUEVO NAVBAR */}
+      <Navbar title="Citas" />
       <div className="container-cita">
-
-        {/* FILTROS */}
         <Paper
           elevation={2}
           sx={{
@@ -113,7 +112,7 @@ export default function AgendarCita() {
             gap: 2,
             flexWrap: 'wrap',
             alignItems: 'center',
-            width: '600px'
+            width: '800px'
           }}
         >
           <TextField
@@ -132,16 +131,22 @@ export default function AgendarCita() {
             onChange={(e) => setFiltroFecha(e.target.value)}
             InputLabelProps={{ shrink: true }}
           />
-          <Button
-            variant="contained"
-            onClick={handleRegistrarCita}
-            style={{ minWidth: '40px', padding: '8px' }}
+          <Select
+            value={filtroEstado}
+            onChange={(e) => setFiltroEstado(e.target.value)}
+            displayEmpty
+            size="small"
+            sx={{ minWidth: 160 }}
           >
+            <MenuItem value="">Todos los estados</MenuItem>
+            <MenuItem value="En espera">En espera</MenuItem>
+            <MenuItem value="Completado">Completado</MenuItem>
+          </Select>
+          <Button variant="contained" onClick={handleRegistrarCita}>
             <AddIcon />
           </Button>
         </Paper>
 
-        {/* TABLA */}
         <div className="tabla-container">
           <table style={{ borderCollapse: "collapse", width: "100%" }}>
             <thead>
@@ -154,6 +159,7 @@ export default function AgendarCita() {
                 <th style={thStyle}>Hora</th>
                 <th style={thStyle}>Motivo</th>
                 <th style={thStyle}>Nota</th>
+                <th style={thStyle}>Estado</th>
                 <th style={thStyle}>Acción</th>
               </tr>
             </thead>
@@ -186,6 +192,7 @@ export default function AgendarCita() {
                     <td style={tdStyle}>{cita.hora}</td>
                     <td style={tdStyle}>{cita.motivo}</td>
                     <td style={tdStyle}>{cita.nota}</td>
+                    <td style={tdStyle}>{cita.estado || 'En espera'}</td>
                     <td style={tdStyle}>
                       <Button
                         variant="outlined"
@@ -228,70 +235,27 @@ export default function AgendarCita() {
         </div>
 
         {/* MODAL EDICIÓN */}
-        <Dialog
-          open={openDialog}
-          onClose={() => setOpenDialog(false)}
-          maxWidth="md"
-          fullWidth
-          PaperProps={{
-            style: {
-              width: '100%',
-              height: '90vh',
-              maxWidth: '900px',
-              overflow: 'hidden',
-            }
-          }}
-        >
+        <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="md" fullWidth>
           <DialogTitle style={{ backgroundColor: "rgb(222, 234, 244)" }}>
             Editar Cita
           </DialogTitle>
-          <DialogContent
-            dividers
-            style={{
-              padding: '32px',
-              overflowY: 'auto',
-              maxHeight: 'calc(100% - 100px)',
-              maxWidth: '600px',
-              width: '600px',
-              height: '600px',
-            }}
-          >
+          <DialogContent dividers style={{ padding: '32px' }}>
             {citaSeleccionada && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                <TextField
-                  label="Nombre"
-                  value={citaSeleccionada.nombre}
-                  onChange={(e) => setCitaSeleccionada({ ...citaSeleccionada, nombre: e.target.value })}
+                <TextField label="Nombre" value={citaSeleccionada.nombre} onChange={(e) => setCitaSeleccionada({ ...citaSeleccionada, nombre: e.target.value })} fullWidth />
+                <TextField label="Cédula" value={citaSeleccionada.cedula} onChange={(e) => setCitaSeleccionada({ ...citaSeleccionada, cedula: e.target.value })} fullWidth />
+                <TextField label="Teléfono" value={citaSeleccionada.telefono} onChange={(e) => setCitaSeleccionada({ ...citaSeleccionada, telefono: e.target.value })} fullWidth />
+                <TextField label="Fecha" type="date" value={citaSeleccionada.fecha} onChange={(e) => setCitaSeleccionada({ ...citaSeleccionada, fecha: e.target.value })} fullWidth InputLabelProps={{ shrink: true }} />
+                <TextField label="Hora" type="time" value={citaSeleccionada.hora} onChange={(e) => setCitaSeleccionada({ ...citaSeleccionada, hora: e.target.value })} fullWidth InputLabelProps={{ shrink: true }} />
+                <Select
+                  label="Estado"
+                  value={citaSeleccionada.estado || 'En espera'}
+                  onChange={(e) => setCitaSeleccionada({ ...citaSeleccionada, estado: e.target.value })}
                   fullWidth
-                />
-                <TextField
-                  label="Cédula"
-                  value={citaSeleccionada.cedula}
-                  onChange={(e) => setCitaSeleccionada({ ...citaSeleccionada, cedula: e.target.value })}
-                  fullWidth
-                />
-                <TextField
-                  label="Teléfono"
-                  value={citaSeleccionada.telefono}
-                  onChange={(e) => setCitaSeleccionada({ ...citaSeleccionada, telefono: e.target.value })}
-                  fullWidth
-                />
-                <TextField
-                  label="Fecha"
-                  type="date"
-                  value={citaSeleccionada.fecha}
-                  onChange={(e) => setCitaSeleccionada({ ...citaSeleccionada, fecha: e.target.value })}
-                  fullWidth
-                  InputLabelProps={{ shrink: true }}
-                />
-                <TextField
-                  label="Hora"
-                  type="time"
-                  value={citaSeleccionada.hora}
-                  onChange={(e) => setCitaSeleccionada({ ...citaSeleccionada, hora: e.target.value })}
-                  fullWidth
-                  InputLabelProps={{ shrink: true }}
-                />
+                >
+                  <MenuItem value="En espera">En espera</MenuItem>
+                  <MenuItem value="Completado">Completado</MenuItem>
+                </Select>
               </div>
             )}
           </DialogContent>
@@ -309,7 +273,6 @@ export default function AgendarCita() {
             <Button onClick={confirmarEliminacion} color="error" variant="contained">Eliminar</Button>
           </DialogActions>
         </Dialog>
-
       </div>
     </AnimatedPage>
   );

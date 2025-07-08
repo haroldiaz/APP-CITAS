@@ -85,7 +85,7 @@ export default function Navbar({ title = "App de Citas" }) {
             </ListItem>
 
             <ListItem disablePadding>
-              <ListItemButton onClick={() => handleNav('/exportar')}>
+              <ListItemButton onClick={() => handleNav('/Exportar')}>
                 <ListItemIcon><PictureAsPdfIcon /></ListItemIcon>
                 <ListItemText primary="Exportar PDF" />
               </ListItemButton>
