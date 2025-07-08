@@ -10,7 +10,7 @@ import TextField from '@mui/material/TextField';
 import AddIcon from '@mui/icons-material/Add';
 import AnimatedPage from '../Componentes/AnimatePage';
 import { motion, AnimatePresence } from 'framer-motion';
-import DenseAppBar from '../Componentes/DenseAppBar.jsx';
+import Navbar from '../Componentes/Navbar.jsx';
 import Paper from '@mui/material/Paper';
 
 export default function AgendarCita() {
@@ -95,7 +95,9 @@ export default function AgendarCita() {
 
   return (
     <AnimatedPage>
-      <DenseAppBar name="Agendar Cita" />
+      
+      
+      <Navbar title="Citas" /> {/* NUEVO NAVBAR */}
       <div className="container-cita">
 
         {/* FILTROS */}

@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-import DenseAppBar from './DenseAppBar';
+import Navbar from '../Componentes/Navbar'; // NUEVO IMPORT
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -101,7 +101,7 @@ export default function Registro() {
 
   return (
     <div>
-      <DenseAppBar name="Registro Cita" />
+      <Navbar title="Registrar Citas" /> {/* NUEVO NAVBAR */}
 
       <div className="container-registro">
         <div className="container-formulario">

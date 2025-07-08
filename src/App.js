@@ -6,7 +6,7 @@ import { AnimatePresence } from 'framer-motion';
 
 import Inicio from './Pages/Inicio';
 import AgendarCita from './Pages/AgendarCita';
-import Registro from './Componentes/Registro';
+import Registro from './Pages/Registro';
 
 function AnimatedRoutes() {
   const location = useLocation();
