@@ -8,6 +8,7 @@ import Inicio from './Pages/Inicio';
 import VerCita from './Pages/VerCitas';
 import Registro from './Pages/Registro';
 import ExportarPdf from './Pages/ExportarPdf';
+import Citas from './Componentes/Citas';
 function AnimatedRoutes() {
   const location = useLocation();
 
@@ -18,6 +19,7 @@ function AnimatedRoutes() {
         <Route path="/AgendarCita" element={<VerCita />} />
         <Route path="/Registro" element={<Registro />} />
         <Route path="/Exportar" element={<ExportarPdf />} />
+        <Route path="/citas" element={<Citas />} />
       </Routes>
     </AnimatePresence>
   );
