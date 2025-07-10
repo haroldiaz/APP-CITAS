@@ -13,7 +13,9 @@ import AddIcon from '@mui/icons-material/Add';
 import AnimatedPage from '../Componentes/AnimatePage.js';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '../Componentes/Navbar.jsx';
-import Paper from '@mui/material/Paper';
+
+import FiltroCitas from '../Componentes/VerCitas.jsx/FiltroCitas.jsx';
+import TablaCitas from '../Componentes/VerCitas.jsx/TablaCitas.jsx';
 
 export default function AgendarCita() {
   const navigate = useNavigate();
@@ -99,52 +101,15 @@ export default function AgendarCita() {
     <AnimatedPage>
       <Navbar title="Citas" />
       <div className="container-cita">
-        <Paper
-          elevation={2}
-          sx={{
-            padding: 2,
-            marginTop: 6,
-            marginBottom: 4,
-            borderRadius: 2,
-            backgroundColor: '#f9f9f9',
-            display: 'flex',
-            gap: 2,
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            width: '800px'
-          }}
+        <FiltroCitas filtroNombre={filtroNombre}
+        setFiltroNombre={setFiltroNombre}
+        filtroFecha={filtroFecha}
+        setFiltroFecha={setFiltroFecha}
+        filtroEstado={filtroEstado}
+        setFiltroEstado={setFiltroEstado}
         >
-          <TextField
-            label="Filtrar por nombre"
-            variant="outlined"
-            size="small"
-            value={filtroNombre}
-            onChange={(e) => setFiltroNombre(e.target.value)}
-          />
-          <TextField
-            label="Filtrar por fecha"
-            type="date"
-            variant="outlined"
-            size="small"
-            value={filtroFecha}
-            onChange={(e) => setFiltroFecha(e.target.value)}
-            InputLabelProps={{ shrink: true }}
-          />
-          <Select
-            value={filtroEstado}
-            onChange={(e) => setFiltroEstado(e.target.value)}
-            displayEmpty
-            size="small"
-            sx={{ minWidth: 160 }}
-          >
-            <MenuItem value="">Todos los estados</MenuItem>
-            <MenuItem value="En espera">En espera</MenuItem>
-            <MenuItem value="Completado">Completado</MenuItem>
-          </Select>
-          <Button variant="contained" onClick={handleRegistrarCita}>
-            <AddIcon />
-          </Button>
-        </Paper>
+
+      </FiltroCitas>
 
         {citasFiltradas.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '40px', backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }}>
@@ -160,75 +125,9 @@ export default function AgendarCita() {
           </div>
         ) : (
           <div className="tabla-container">
-            <table style={{ borderCollapse: "collapse", width: "100%" }}>
-              <thead>
-                <tr>
-                  <th style={thStyle}>ID</th>
-                  <th style={thStyle}>Nombre</th>
-                  <th style={thStyle}>Cédula</th>
-                  <th style={thStyle}>Teléfono</th>
-                  <th style={thStyle}>Fecha</th>
-                  <th style={thStyle}>Hora</th>
-                  <th style={thStyle}>Motivo</th>
-                  <th style={thStyle}>Nota</th>
-                  <th style={thStyle}>Estado</th>
-                  <th style={thStyle}>Acción</th>
-                </tr>
-              </thead>
-              <AnimatePresence component="tbody">
-                <tbody>
-                  {citasPaginadas.map((cita) => (
-                    <motion.tr
-                      key={cita.id}
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{
-                        opacity: 1,
-                        y: 0,
-                        scale: filaEliminando === cita.id ? 0.95 : 1,
-                        backgroundColor: filaEliminando === cita.id ? "#ffe6e6" : "#fff",
-                        transition: { duration: 0.3, ease: "easeOut" }
-                      }}
-                      exit={{
-                        opacity: 0,
-                        height: 0,
-                        scale: 0.95,
-                        transition: { duration: 0.3, ease: "easeInOut" }
-                      }}
-                      style={{ overflow: "hidden", borderRadius: "10px" }}
-                    >
-                      <td style={tdStyle}>{cita.id}</td>
-                      <td style={tdStyle}>{cita.nombre}</td>
-                      <td style={tdStyle}>{cita.cedula}</td>
-                      <td style={tdStyle}>{cita.telefono}</td>
-                      <td style={tdStyle}>{cita.fecha}</td>
-                      <td style={tdStyle}>{cita.hora}</td>
-                      <td style={tdStyle}>{cita.motivo}</td>
-                      <td style={tdStyle}>{cita.nota}</td>
-                      <td style={tdStyle}>{cita.estado || 'En espera'}</td>
-                      <td style={tdStyle}>
-                        <Button
-                          variant="outlined"
-                          color="error"
-                          size="small"
-                          onClick={() => confirmarEliminar(cita)}
-                        >
-                          Eliminar
-                        </Button>
-                        <Button
-                          variant="outlined"
-                          color="primary"
-                          size="small"
-                          onClick={() => handleEditar(cita)}
-                          style={{ marginLeft: '8px' }}
-                        >
-                          Editar
-                        </Button>
-                      </td>
-                    </motion.tr>
-                  ))}
-                </tbody>
-              </AnimatePresence>
-            </table>
+            <TablaCitas citas= {citas} onEliminar={confirmarEliminar} onEditar={handleEditar} filaEliminando={confirmarEliminacion}>
+              
+            </TablaCitas>
 
             {totalPaginas > 1 && (
               <div className="paginacion" style={{ marginTop: "16px" }}>
