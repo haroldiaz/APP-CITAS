@@ -2,20 +2,21 @@ import React, { useState, useEffect } from 'react';
 import '../Styles/AgendarCita.css';
 import { useNavigate } from "react-router-dom";
 import Button from '@mui/material/Button';
+
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
+
+
 import DialogActions from '@mui/material/DialogActions';
-import TextField from '@mui/material/TextField';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
+
 import AddIcon from '@mui/icons-material/Add';
 import AnimatedPage from '../Componentes/AnimatePage.js';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import Navbar from '../Componentes/Navbar.jsx';
 
 import FiltroCitas from '../Componentes/VerCitas.jsx/FiltroCitas.jsx';
 import TablaCitas from '../Componentes/VerCitas.jsx/TablaCitas.jsx';
+import ModalEditarCita from '../Componentes/VerCitas.jsx/ModalEditarCita.jsx';
 
 export default function AgendarCita() {
   const navigate = useNavigate();
@@ -125,8 +126,8 @@ export default function AgendarCita() {
           </div>
         ) : (
           <div className="tabla-container">
-            <TablaCitas citas= {citas} onEliminar={confirmarEliminar} onEditar={handleEditar} filaEliminando={confirmarEliminacion}>
-              
+            <TablaCitas citas= {citas} onEliminar={confirmarEliminar} onEditar={handleEditar} filaEliminando={filaEliminando}>
+
             </TablaCitas>
 
             {totalPaginas > 1 && (
@@ -145,38 +146,8 @@ export default function AgendarCita() {
             )}
           </div>
         )}
-
-        {/* MODAL EDICIÓN */}
-        <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="md" fullWidth>
-          <DialogTitle style={{ backgroundColor: "rgb(222, 234, 244)" }}>
-            Editar Cita
-          </DialogTitle>
-          <DialogContent dividers style={{ padding: '32px' }}>
-            {citaSeleccionada && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                <TextField label="Nombre" value={citaSeleccionada.nombre} onChange={(e) => setCitaSeleccionada({ ...citaSeleccionada, nombre: e.target.value })} fullWidth />
-                <TextField label="Cédula" value={citaSeleccionada.cedula} onChange={(e) => setCitaSeleccionada({ ...citaSeleccionada, cedula: e.target.value })} fullWidth />
-                <TextField label="Teléfono" value={citaSeleccionada.telefono} onChange={(e) => setCitaSeleccionada({ ...citaSeleccionada, telefono: e.target.value })} fullWidth />
-                <TextField label="Fecha" type="date" value={citaSeleccionada.fecha} onChange={(e) => setCitaSeleccionada({ ...citaSeleccionada, fecha: e.target.value })} fullWidth InputLabelProps={{ shrink: true }} />
-                <TextField label="Hora" type="time" value={citaSeleccionada.hora} onChange={(e) => setCitaSeleccionada({ ...citaSeleccionada, hora: e.target.value })} fullWidth InputLabelProps={{ shrink: true }} />
-                <Select
-                  label="Estado"
-                  value={citaSeleccionada.estado || 'En espera'}
-                  onChange={(e) => setCitaSeleccionada({ ...citaSeleccionada, estado: e.target.value })}
-                  fullWidth
-                >
-                  <MenuItem value="En espera">En espera</MenuItem>
-                  <MenuItem value="Completado">Completado</MenuItem>
-                </Select>
-              </div>
-            )}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setOpenDialog(false)} color="secondary">Cancelar</Button>
-            <Button onClick={handleGuardarEdicion} variant="contained" color="primary">Guardar</Button>
-          </DialogActions>
-        </Dialog>
-
+        <ModalEditarCita openDialog={openDialog} setOpenDialog={setOpenDialog} citaSeleccionada={citaSeleccionada} setCitaSeleccionada={setCitaSeleccionada} handleGuardarEdicion={handleGuardarEdicion} ></ModalEditarCita>
+       
         {/* MODAL CONFIRMAR ELIMINACIÓN */}
         <Dialog open={openConfirmDialog} onClose={() => setOpenConfirmDialog(false)}>
           <DialogTitle>¿Estás seguro que deseas eliminar esta cita?</DialogTitle>
@@ -190,22 +161,3 @@ export default function AgendarCita() {
   );
 }
 
-const thStyle = {
-  padding: "14px 16px",
-  backgroundColor: "#f5f5f5",
-  color: "#333",
-  fontSize: "11px",
-  fontWeight: "600",
-  textAlign: "left",
-  textTransform: "uppercase",
-  letterSpacing: "0.6px",
-  borderBottom: "1px solid #ddd"
-};
-
-const tdStyle = {
-  padding: "12px 16px",
-  fontSize: "11px",
-  color: "#444",
-  borderBottom: "1px solid #eee",
-  backgroundColor: "#fff"
-};
