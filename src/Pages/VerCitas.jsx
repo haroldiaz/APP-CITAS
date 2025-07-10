@@ -35,8 +35,7 @@ export default function AgendarCita() {
   const [filaEliminando, setFilaEliminando] = useState(null);
   const [filtroNombre, setFiltroNombre] = useState('');
   const [filtroFecha, setFiltroFecha] = useState('');
-  const [filtroEstado, setFiltroEstado] = useState(''); // nuevo filtro
-
+  const [filtroEstado, setFiltroEstado] = useState('');
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [citaParaEliminar, setCitaParaEliminar] = useState(null);
 
@@ -147,92 +146,106 @@ export default function AgendarCita() {
           </Button>
         </Paper>
 
-        <div className="tabla-container">
-          <table style={{ borderCollapse: "collapse", width: "100%" }}>
-            <thead>
-              <tr>
-                <th style={thStyle}>ID</th>
-                <th style={thStyle}>Nombre</th>
-                <th style={thStyle}>Cédula</th>
-                <th style={thStyle}>Teléfono</th>
-                <th style={thStyle}>Fecha</th>
-                <th style={thStyle}>Hora</th>
-                <th style={thStyle}>Motivo</th>
-                <th style={thStyle}>Nota</th>
-                <th style={thStyle}>Estado</th>
-                <th style={thStyle}>Acción</th>
-              </tr>
-            </thead>
-            <AnimatePresence component="tbody">
-              <tbody>
-                {citasPaginadas.map((cita) => (
-                  <motion.tr
-                    key={cita.id}
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{
-                      opacity: 1,
-                      y: 0,
-                      scale: filaEliminando === cita.id ? 0.95 : 1,
-                      backgroundColor: filaEliminando === cita.id ? "#ffe6e6" : "#fff",
-                      transition: { duration: 0.3, ease: "easeOut" }
-                    }}
-                    exit={{
-                      opacity: 0,
-                      height: 0,
-                      scale: 0.95,
-                      transition: { duration: 0.3, ease: "easeInOut" }
-                    }}
-                    style={{ overflow: "hidden", borderRadius: "10px" }}
-                  >
-                    <td style={tdStyle}>{cita.id}</td>
-                    <td style={tdStyle}>{cita.nombre}</td>
-                    <td style={tdStyle}>{cita.cedula}</td>
-                    <td style={tdStyle}>{cita.telefono}</td>
-                    <td style={tdStyle}>{cita.fecha}</td>
-                    <td style={tdStyle}>{cita.hora}</td>
-                    <td style={tdStyle}>{cita.motivo}</td>
-                    <td style={tdStyle}>{cita.nota}</td>
-                    <td style={tdStyle}>{cita.estado || 'En espera'}</td>
-                    <td style={tdStyle}>
-                      <Button
-                        variant="outlined"
-                        color="error"
-                        size="small"
-                        onClick={() => confirmarEliminar(cita)}
-                      >
-                        Eliminar
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        color="primary"
-                        size="small"
-                        onClick={() => handleEditar(cita)}
-                        style={{ marginLeft: '8px' }}
-                      >
-                        Editar
-                      </Button>
-                    </td>
-                  </motion.tr>
-                ))}
-              </tbody>
-            </AnimatePresence>
-          </table>
+        {citasFiltradas.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '40px', backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }}>
+            <h2 style={{ marginBottom: '16px', fontSize: '20px', color: '#444' }}>No tienes ninguna cita registrada</h2>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleRegistrarCita}
+              startIcon={<AddIcon />}
+            >
+              Agendar Cita
+            </Button>
+          </div>
+        ) : (
+          <div className="tabla-container">
+            <table style={{ borderCollapse: "collapse", width: "100%" }}>
+              <thead>
+                <tr>
+                  <th style={thStyle}>ID</th>
+                  <th style={thStyle}>Nombre</th>
+                  <th style={thStyle}>Cédula</th>
+                  <th style={thStyle}>Teléfono</th>
+                  <th style={thStyle}>Fecha</th>
+                  <th style={thStyle}>Hora</th>
+                  <th style={thStyle}>Motivo</th>
+                  <th style={thStyle}>Nota</th>
+                  <th style={thStyle}>Estado</th>
+                  <th style={thStyle}>Acción</th>
+                </tr>
+              </thead>
+              <AnimatePresence component="tbody">
+                <tbody>
+                  {citasPaginadas.map((cita) => (
+                    <motion.tr
+                      key={cita.id}
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{
+                        opacity: 1,
+                        y: 0,
+                        scale: filaEliminando === cita.id ? 0.95 : 1,
+                        backgroundColor: filaEliminando === cita.id ? "#ffe6e6" : "#fff",
+                        transition: { duration: 0.3, ease: "easeOut" }
+                      }}
+                      exit={{
+                        opacity: 0,
+                        height: 0,
+                        scale: 0.95,
+                        transition: { duration: 0.3, ease: "easeInOut" }
+                      }}
+                      style={{ overflow: "hidden", borderRadius: "10px" }}
+                    >
+                      <td style={tdStyle}>{cita.id}</td>
+                      <td style={tdStyle}>{cita.nombre}</td>
+                      <td style={tdStyle}>{cita.cedula}</td>
+                      <td style={tdStyle}>{cita.telefono}</td>
+                      <td style={tdStyle}>{cita.fecha}</td>
+                      <td style={tdStyle}>{cita.hora}</td>
+                      <td style={tdStyle}>{cita.motivo}</td>
+                      <td style={tdStyle}>{cita.nota}</td>
+                      <td style={tdStyle}>{cita.estado || 'En espera'}</td>
+                      <td style={tdStyle}>
+                        <Button
+                          variant="outlined"
+                          color="error"
+                          size="small"
+                          onClick={() => confirmarEliminar(cita)}
+                        >
+                          Eliminar
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          size="small"
+                          onClick={() => handleEditar(cita)}
+                          style={{ marginLeft: '8px' }}
+                        >
+                          Editar
+                        </Button>
+                      </td>
+                    </motion.tr>
+                  ))}
+                </tbody>
+              </AnimatePresence>
+            </table>
 
-          {totalPaginas > 1 && (
-            <div className="paginacion" style={{ marginTop: "16px" }}>
-              {[...Array(totalPaginas)].map((_, i) => (
-                <Button
-                  key={i}
-                  onClick={() => setPaginaActual(i + 1)}
-                  variant={paginaActual === i + 1 ? "contained" : "outlined"}
-                  size="small"
-                >
-                  {i + 1}
-                </Button>
-              ))}
-            </div>
-          )}
-        </div>
+            {totalPaginas > 1 && (
+              <div className="paginacion" style={{ marginTop: "16px" }}>
+                {[...Array(totalPaginas)].map((_, i) => (
+                  <Button
+                    key={i}
+                    onClick={() => setPaginaActual(i + 1)}
+                    variant={paginaActual === i + 1 ? "contained" : "outlined"}
+                    size="small"
+                  >
+                    {i + 1}
+                  </Button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* MODAL EDICIÓN */}
         <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="md" fullWidth>

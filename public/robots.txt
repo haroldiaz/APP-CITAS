@@ -1,3 +1,14 @@
 # https://www.robotstxt.org/robotstxt.html
+
+# Aplica a todos los bots
 User-agent: *
-Disallow:
+
+# No permitir que los bots entren a la carpeta /admin/
+Disallow: /admin/
+
+# Puedes agregar otras carpetas si las quieres ocultar de los motores de búsqueda
+Disallow: /private/
+Disallow: /settings/
+
+# Indica dónde está el sitemap de tu sitio (opcional pero útil para SEO)
+#Sitemap: https://tusitio.com/sitemap.xml
