@@ -1,19 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import '../Styles/AgendarCita.css';
 import { useNavigate } from "react-router-dom";
 import Button from '@mui/material/Button';
-
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
-
-
 import DialogActions from '@mui/material/DialogActions';
-
 import AddIcon from '@mui/icons-material/Add';
 import AnimatedPage from '../Componentes/AnimatePage.js';
-
 import Navbar from '../Componentes/Navbar.jsx';
-
 import FiltroCitas from '../Componentes/VerCitas.jsx/FiltroCitas.jsx';
 import TablaCitas from '../Componentes/VerCitas.jsx/TablaCitas.jsx';
 import ModalEditarCita from '../Componentes/VerCitas.jsx/ModalEditarCita.jsx';
@@ -102,19 +96,11 @@ export default function AgendarCita() {
     <AnimatedPage>
       <Navbar title="Citas" />
       <div className="container-cita">
-        <FiltroCitas filtroNombre={filtroNombre}
-        setFiltroNombre={setFiltroNombre}
-        filtroFecha={filtroFecha}
-        setFiltroFecha={setFiltroFecha}
-        filtroEstado={filtroEstado}
-        setFiltroEstado={setFiltroEstado}
-        >
-
-      </FiltroCitas>
+        
 
         {citasFiltradas.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '40px', backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }}>
-            <h2 style={{ marginBottom: '16px', fontSize: '20px', color: '#444' }}>No tienes ninguna cita registrada</h2>
+          <div style={{ textAlign: 'center', padding: '60px', marginTop:'40px',backgroundColor: '#fff', borderRadius: '12px', boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }}>
+            <h2 style={{  marginBottom: '16px', fontSize: '20px', color: '#444' }}>No tienes ninguna cita registrada</h2>
             <Button
               variant="contained"
               color="primary"
@@ -125,25 +111,41 @@ export default function AgendarCita() {
             </Button>
           </div>
         ) : (
-          <div className="tabla-container">
-            <TablaCitas citas= {citas} onEliminar={confirmarEliminar} onEditar={handleEditar} filaEliminando={filaEliminando}>
 
-            </TablaCitas>
+          <div>
+              <FiltroCitas filtroNombre={filtroNombre}
+                      setFiltroNombre={setFiltroNombre}
+                      filtroFecha={filtroFecha}
+                      setFiltroFecha={setFiltroFecha}
+                      filtroEstado={filtroEstado}
+                      setFiltroEstado={setFiltroEstado}
+                      >
 
-            {totalPaginas > 1 && (
-              <div className="paginacion" style={{ marginTop: "16px" }}>
-                {[...Array(totalPaginas)].map((_, i) => (
-                  <Button
-                    key={i}
-                    onClick={() => setPaginaActual(i + 1)}
-                    variant={paginaActual === i + 1 ? "contained" : "outlined"}
-                    size="small"
-                  >
-                    {i + 1}
-                  </Button>
-                ))}
-              </div>
-            )}
+              </FiltroCitas>
+          
+            <div className="tabla-container">
+              <TablaCitas 
+                citas= {citas} 
+                onEliminar={confirmarEliminar} 
+                onEditar={handleEditar} 
+                filaEliminando={filaEliminando}>
+              </TablaCitas>
+
+              {totalPaginas > 1 && (
+                <div className="paginacion" style={{ marginTop: "16px" }}>
+                  {[...Array(totalPaginas)].map((_, i) => (
+                    <Button
+                      key={i}
+                      onClick={() => setPaginaActual(i + 1)}
+                      variant={paginaActual === i + 1 ? "contained" : "outlined"}
+                      size="small"
+                    >
+                      {i + 1}
+                    </Button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         )}
         <ModalEditarCita openDialog={openDialog} setOpenDialog={setOpenDialog} citaSeleccionada={citaSeleccionada} setCitaSeleccionada={setCitaSeleccionada} handleGuardarEdicion={handleGuardarEdicion} ></ModalEditarCita>

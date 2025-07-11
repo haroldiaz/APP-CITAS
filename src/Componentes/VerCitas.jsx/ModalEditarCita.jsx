@@ -13,11 +13,14 @@ export default function ModalEditarCita({openDialog,setOpenDialog,citaSelecciona
     return(
         <div>
              {/* MODAL EDICIÓN */}
-        <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="md" fullWidth>
-          <DialogTitle style={{ backgroundColor: "rgb(222, 234, 244)" }}>
+        <Dialog 
+          open={openDialog} 
+          onClose={() => setOpenDialog(false)} 
+          maxWidth="md" fullWidth>
+          <DialogTitle style={{ backgroundColor: "rgb(165, 206, 239)" }}>
             Editar Cita
           </DialogTitle>
-          <DialogContent dividers style={{ padding: '32px' }}>
+          <DialogContent dividers style={{ padding: '42px' }}>
             {citaSeleccionada && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                 <TextField label="Nombre" value={citaSeleccionada.nombre} onChange={(e) => setCitaSeleccionada({ ...citaSeleccionada, nombre: e.target.value })} fullWidth />
